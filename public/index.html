@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CodeCraftHub Learning Studio</title>
+    <title>CodeCraftHub: Your Learning Management Platform</title>
     <style>
       :root {
         --sand: #f5efe4;
@@ -187,7 +187,13 @@
         margin-top: 26px;
       }
 
-      .btn {
+      .btn,
+      .btn-primary,
+      .btn-secondary,
+      .btn-success,
+      .btn-accent,
+      .btn-danger,
+      .btn-ghost {
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -202,20 +208,32 @@
           opacity 180ms ease;
       }
 
-      .btn:hover {
+      .btn:hover,
+      .btn-primary:hover,
+      .btn-secondary:hover,
+      .btn-success:hover,
+      .btn-accent:hover,
+      .btn-danger:hover,
+      .btn-ghost:hover {
         transform: translateY(-1px);
       }
 
-      .btn:disabled {
+      .btn:disabled,
+      .btn-primary:disabled,
+      .btn-secondary:disabled,
+      .btn-success:disabled,
+      .btn-accent:disabled,
+      .btn-danger:disabled,
+      .btn-ghost:disabled {
         opacity: 0.72;
         cursor: not-allowed;
         transform: none;
       }
 
       .btn-primary {
-        background: linear-gradient(135deg, #f5c86d, #ffe0b6);
-        color: var(--navy);
-        box-shadow: 0 14px 28px rgba(243, 195, 93, 0.22);
+        background: #8B5CF6;
+        color: #ffffff;
+        box-shadow: 0 14px 28px rgba(139, 92, 246, 0.22);
       }
 
       .btn-secondary {
@@ -231,14 +249,20 @@
         border: 1px solid rgba(16, 35, 59, 0.08);
       }
 
+      .btn-success {
+        background: #F59E0B;
+        color: #ffffff;
+        box-shadow: 0 16px 28px rgba(245, 158, 11, 0.24);
+      }
+
       .btn-accent {
-        background: linear-gradient(135deg, var(--teal), #93efe0);
-        color: #062235;
-        box-shadow: 0 16px 28px rgba(20, 200, 167, 0.26);
+        background: #F59E0B;
+        color: #ffffff;
+        box-shadow: 0 16px 28px rgba(245, 158, 11, 0.24);
       }
 
       .btn-danger {
-        background: linear-gradient(135deg, #d94a5b, #ef7d78);
+        background: #EF4444;
         color: #fff;
       }
 
@@ -878,15 +902,14 @@
       <section class="hero" aria-labelledby="heroTitle">
         <div class="hero-copy">
           <div class="eyebrow">CodeCraftHub Learning Studio</div>
-          <h1 id="heroTitle">Build momentum around what you want to learn next.</h1>
+          <h1 id="heroTitle">CodeCraftHub: Your Learning Management Platform</h1>
           <p>
             Track courses, surface deadlines, and manage your learning roadmap from one
-            polished dashboard. The visuals are custom, but the project still uses only
-            vanilla HTML, CSS, and JavaScript.
+            polished dashboard built with only HTML, CSS, and JavaScript.
           </p>
           <div class="actions">
-            <a class="btn btn-primary" href="#composer">Add a new course</a>
-            <button class="btn btn-secondary" type="button" data-refresh>
+            <a class="btn-primary" href="#composer">Add a new course</a>
+            <button class="btn-secondary" type="button" data-refresh>
               Refresh dashboard
             </button>
           </div>
@@ -966,7 +989,7 @@
               </select>
             </div>
             <div class="submit-row">
-              <button class="btn btn-accent" id="createButton" type="submit">Add course</button>
+              <button class="btn-success" id="createButton" type="submit">Add Course</button>
               <span class="tiny">The backend assigns the ID and creation timestamp.</span>
             </div>
           </form>
@@ -981,7 +1004,7 @@
                 leaving the page.
               </p>
             </div>
-            <button class="btn btn-secondary" type="button" data-refresh>Sync now</button>
+            <button class="btn-secondary" type="button" data-refresh>Sync now</button>
           </div>
 
           <div class="summary">
@@ -1073,8 +1096,8 @@
             </select>
           </div>
           <div class="submit-row">
-            <button class="btn btn-accent" id="saveButton" type="submit">Save changes</button>
-            <button class="btn btn-secondary" id="cancelEdit" type="button">Cancel</button>
+            <button class="btn-success" id="saveButton" type="submit">Save Changes</button>
+            <button class="btn-secondary" id="cancelEdit" type="button">Cancel</button>
           </div>
         </form>
       </div>
@@ -1341,8 +1364,8 @@
               </div>
               <div class="deadline ${deadline.tone}">${escapeHtml(deadline.text)}</div>
               <div class="card-actions">
-                <button class="btn btn-ghost" type="button" data-action="edit" data-id="${course.id}">Edit</button>
-                <button class="btn btn-danger" type="button" data-action="delete" data-id="${course.id}">Remove</button>
+                <button class="btn-ghost" type="button" onclick="handleEdit(${course.id})">Edit</button>
+                <button class="btn-danger" type="button" onclick="handleDelete(${course.id})">Remove</button>
               </div>
             </article>
           `;
@@ -1383,6 +1406,16 @@
         refs.editModal.classList.remove("is-visible");
         refs.editModal.setAttribute("aria-hidden", "true");
         refs.editForm.reset();
+      }
+
+      function handleEdit(id) {
+        const course = state.courses.find((item) => item.id === id);
+        if (!course) {
+          showNotice("That course could not be found in the current view.", "error");
+          return;
+        }
+
+        openModal(course);
       }
 
       async function submitCreate(event) {
@@ -1427,7 +1460,7 @@
         }
       }
 
-      async function removeCourse(id) {
+      async function handleDelete(id) {
         const course = state.courses.find((item) => item.id === id);
         if (!window.confirm(`Delete ${course ? course.name : "this course"}? This action cannot be undone.`)) return;
         showOverlay("Removing course...");
@@ -1460,15 +1493,6 @@
         state.filter = button.dataset.filter;
         render();
       });
-      refs.cards.addEventListener("click", (event) => {
-        const button = event.target.closest("[data-action]");
-        if (!button) return;
-        const id = Number(button.dataset.id);
-        const course = state.courses.find((item) => item.id === id);
-        if (!course) return showNotice("That course could not be found in the current view.", "error");
-        if (button.dataset.action === "edit") openModal(course);
-        if (button.dataset.action === "delete") removeCourse(id);
-      });
       refs.dismissNotice.addEventListener("click", hideNotice);
       refs.closeModal.addEventListener("click", closeModal);
       refs.cancelEdit.addEventListener("click", closeModal);
@@ -1479,6 +1503,9 @@
         if (event.key === "Escape" && refs.editModal.classList.contains("is-visible")) closeModal();
       });
       refs.refreshButtons.forEach((button) => button.addEventListener("click", () => loadDashboard()));
+
+      window.handleEdit = handleEdit;
+      window.handleDelete = handleDelete;
 
       setDefaultDate();
       renderFilters();

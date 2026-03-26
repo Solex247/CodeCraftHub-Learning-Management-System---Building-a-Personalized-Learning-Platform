@@ -17,6 +17,8 @@ CodeCraftHub is a simple REST API for tracking developer learning goals. It is b
 .
 |-- app.js
 |-- package.json
+|-- public/
+|   `-- index.html
 |-- README.md
 |-- TEST_CASES.md
 `-- courses.json   (created automatically when the app starts)
@@ -39,7 +41,7 @@ npm.cmd install
 
 ## How to Run the Application
 
-Start the API with:
+Start the backend and dashboard with:
 
 ```bash
 npm start
@@ -63,15 +65,39 @@ If needed in PowerShell:
 npm.cmd run dev
 ```
 
-The server runs on `http://localhost:5000`.
+The app runs on `http://localhost:5000`.
+
+Open the frontend dashboard at:
+
+```text
+http://localhost:5000
+```
+
+The REST API is available at:
+
+```text
+http://localhost:5000/api/courses
+```
 
 When the app starts, it prints:
 
 ```text
 - CodeCraftHub API is starting...
 - Data will be stored in: <project-path>/courses.json
+- Dashboard is available at: http://localhost:5000
 - API is available at: http://localhost:5000
 ```
+
+## Frontend Dashboard
+
+The project now includes a custom single-page dashboard in `public/index.html`. It uses vanilla HTML, CSS, and JavaScript and includes:
+
+- A responsive modern course management interface
+- A course creation form
+- Edit and delete actions for each course
+- Search and status filtering
+- Live stats powered by `GET /api/courses/stats`
+- Loading and success or error feedback states
 
 ## API Endpoints
 

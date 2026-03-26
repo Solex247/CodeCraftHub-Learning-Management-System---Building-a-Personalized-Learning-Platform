@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CodeCraftHub Learning Studio</title>
+    <style>
+      :root {
+        --sand: #f5efe4;
+        --paper: rgba(255, 255, 255, 0.82);
+        --paper-strong: rgba(255, 255, 255, 0.94);
+        --ink: #10233b;
+        --muted: #5b6a7d;
+        --navy: #0d2139;
+        --teal: #14c8a7;
+        --coral: #ff7f5a;
+        --gold: #f3c35d;
+        --sky: #67a8ff;
+        --danger: #de5a5a;
+        --line: rgba(16, 35, 59, 0.1);
+        --shadow: 0 24px 60px rgba(13, 33, 57, 0.14);
+        --shadow-soft: 0 14px 28px rgba(13, 33, 57, 0.08);
+        --radius-xl: 32px;
+        --radius-lg: 24px;
+        --radius-md: 18px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Trebuchet MS", "Aptos", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at top left, rgba(255, 127, 90, 0.2), transparent 30%),
+          radial-gradient(circle at top right, rgba(20, 200, 167, 0.16), transparent 26%),
+          linear-gradient(180deg, #faf5eb 0%, #f2ebde 50%, #f7f3ea 100%);
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(16, 35, 59, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(16, 35, 59, 0.03) 1px, transparent 1px);
+        background-size: 72px 72px;
+        mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent 86%);
+      }
+
+      h1,
+      h2,
+      h3,
+      .metric-value,
+      .badge,
+      button {
+        font-family: "Bahnschrift", "Trebuchet MS", sans-serif;
+      }
+
+      button,
+      input,
+      textarea,
+      select {
+        font: inherit;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .shell {
+        width: min(1320px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 28px 0 56px;
+        position: relative;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        margin-bottom: 18px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.74);
+        border: 1px solid rgba(255, 255, 255, 0.82);
+        box-shadow: var(--shadow-soft);
+        backdrop-filter: blur(16px);
+        font-size: 0.92rem;
+      }
+
+      .pill::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--teal), var(--gold));
+        box-shadow: 0 0 0 6px rgba(20, 200, 167, 0.12);
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.9fr);
+        gap: 24px;
+        padding: 30px;
+        border-radius: 38px;
+        color: #f6fbff;
+        background:
+          radial-gradient(circle at top right, rgba(103, 168, 255, 0.28), transparent 22%),
+          linear-gradient(140deg, #0d2139 0%, #123356 58%, #15405e 100%);
+        box-shadow: var(--shadow);
+      }
+
+      .hero::before,
+      .hero::after {
+        content: "";
+        position: absolute;
+        border-radius: 999px;
+        pointer-events: none;
+      }
+
+      .hero::before {
+        width: 320px;
+        height: 320px;
+        right: -90px;
+        top: -90px;
+        background: radial-gradient(circle, rgba(243, 195, 93, 0.22), transparent 70%);
+      }
+
+      .hero::after {
+        width: 260px;
+        height: 260px;
+        left: 42%;
+        bottom: -120px;
+        background: radial-gradient(circle, rgba(20, 200, 167, 0.24), transparent 72%);
+      }
+
+      .hero-copy,
+      .hero-panel {
+        position: relative;
+        z-index: 1;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        font-size: 0.74rem;
+      }
+
+      .hero h1 {
+        margin: 18px 0 0;
+        font-size: clamp(2.6rem, 5vw, 4.9rem);
+        line-height: 0.93;
+        letter-spacing: -0.05em;
+        max-width: 10ch;
+      }
+
+      .hero-copy p {
+        max-width: 60ch;
+        margin: 18px 0 0;
+        color: rgba(246, 251, 255, 0.82);
+        line-height: 1.7;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 26px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        min-height: 52px;
+        padding: 14px 18px;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition:
+          transform 180ms ease,
+          box-shadow 180ms ease,
+          opacity 180ms ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .btn:disabled {
+        opacity: 0.72;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #f5c86d, #ffe0b6);
+        color: var(--navy);
+        box-shadow: 0 14px 28px rgba(243, 195, 93, 0.22);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.08);
+        color: #f6fbff;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+      }
+
+      .studio .btn-secondary,
+      .modal .btn-secondary {
+        background: rgba(255, 255, 255, 0.88);
+        color: var(--ink);
+        border: 1px solid rgba(16, 35, 59, 0.08);
+      }
+
+      .btn-accent {
+        background: linear-gradient(135deg, var(--teal), #93efe0);
+        color: #062235;
+        box-shadow: 0 16px 28px rgba(20, 200, 167, 0.26);
+      }
+
+      .btn-danger {
+        background: linear-gradient(135deg, #d94a5b, #ef7d78);
+        color: #fff;
+      }
+
+      .hero-note {
+        margin-top: 18px;
+        color: rgba(246, 251, 255, 0.72);
+      }
+
+      .hero-panel {
+        display: grid;
+        gap: 18px;
+      }
+
+      .glass {
+        padding: 20px;
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(18px);
+      }
+
+      .glass-label {
+        display: block;
+        margin-bottom: 12px;
+        color: rgba(246, 251, 255, 0.72);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: 0.72rem;
+      }
+
+      .hero-metrics {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .hero-metric {
+        padding: 16px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .hero-metric span {
+        color: rgba(246, 251, 255, 0.72);
+        font-size: 0.86rem;
+      }
+
+      .hero-metric strong {
+        display: block;
+        margin-top: 6px;
+        font-size: 1.95rem;
+      }
+
+      .progress-bar {
+        height: 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+        overflow: hidden;
+      }
+
+      .progress-bar span {
+        display: block;
+        width: 0;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--teal), var(--gold), var(--coral));
+        transition: width 240ms ease;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 360px minmax(0, 1fr);
+        gap: 24px;
+        margin-top: 24px;
+        align-items: start;
+      }
+
+      .panel {
+        position: relative;
+        border-radius: var(--radius-xl);
+        background: var(--paper);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: var(--shadow-soft);
+        backdrop-filter: blur(18px);
+      }
+
+      .panel::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        pointer-events: none;
+      }
+
+      .composer,
+      .studio {
+        padding: 24px;
+      }
+
+      .composer {
+        position: sticky;
+        top: 22px;
+      }
+
+      .panel h2 {
+        margin: 0;
+        font-size: 1.6rem;
+        letter-spacing: -0.04em;
+      }
+
+      .panel p {
+        margin: 10px 0 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .swatch {
+        display: flex;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .swatch span {
+        flex: 1;
+        height: 8px;
+        border-radius: 999px;
+      }
+
+      .swatch span:nth-child(1) {
+        background: linear-gradient(90deg, var(--teal), #8debdc);
+      }
+
+      .swatch span:nth-child(2) {
+        background: linear-gradient(90deg, var(--sky), #b7d5ff);
+      }
+
+      .swatch span:nth-child(3) {
+        background: linear-gradient(90deg, var(--coral), #ffb6a4);
+      }
+
+      .field {
+        display: grid;
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .field label {
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .field input,
+      .field textarea,
+      .field select,
+      .search input {
+        width: 100%;
+        border: 1px solid rgba(16, 35, 59, 0.12);
+        border-radius: var(--radius-md);
+        background: rgba(255, 255, 255, 0.86);
+        color: var(--ink);
+        padding: 14px 16px;
+        outline: none;
+      }
+
+      .field textarea {
+        min-height: 130px;
+        resize: vertical;
+      }
+
+      .field input:focus,
+      .field textarea:focus,
+      .field select:focus,
+      .search input:focus {
+        border-color: rgba(20, 200, 167, 0.55);
+        box-shadow: 0 0 0 4px rgba(20, 200, 167, 0.12);
+      }
+
+      .submit-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .tiny {
+        font-size: 0.85rem;
+      }
+
+      .studio-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 18px;
+      }
+
+      .metric {
+        padding: 18px;
+        border-radius: var(--radius-lg);
+        background: var(--paper-strong);
+        border: 1px solid rgba(16, 35, 59, 0.08);
+        box-shadow: 0 10px 20px rgba(13, 33, 57, 0.06);
+      }
+
+      .metric span {
+        display: block;
+        font-size: 0.8rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .metric-value {
+        margin-top: 10px;
+        font-size: 2.05rem;
+        letter-spacing: -0.06em;
+      }
+
+      .metric small {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+      }
+
+      .notice {
+        display: none;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 18px;
+        padding: 16px 18px;
+        border-radius: 20px;
+        border: 1px solid transparent;
+      }
+
+      .notice.is-visible {
+        display: flex;
+      }
+
+      .notice[data-tone="success"] {
+        background: rgba(20, 200, 167, 0.12);
+        border-color: rgba(20, 200, 167, 0.18);
+        color: #0e6251;
+      }
+
+      .notice[data-tone="error"] {
+        background: rgba(222, 90, 90, 0.12);
+        border-color: rgba(222, 90, 90, 0.18);
+        color: #8d3131;
+      }
+
+      .notice[data-tone="neutral"] {
+        background: rgba(103, 168, 255, 0.12);
+        border-color: rgba(103, 168, 255, 0.18);
+        color: #27548d;
+      }
+
+      .notice button {
+        border: none;
+        background: transparent;
+        color: inherit;
+        font-size: 1.1rem;
+      }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin-top: 18px;
+        padding: 18px;
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.68);
+        border: 1px solid rgba(255, 255, 255, 0.78);
+      }
+
+      .search {
+        position: relative;
+        flex: 1 1 260px;
+      }
+
+      .search::before {
+        content: "⌕";
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--muted);
+      }
+
+      .search input {
+        padding-left: 46px;
+        border-radius: 999px;
+      }
+
+      .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .filter {
+        border: 1px solid rgba(16, 35, 59, 0.08);
+        background: rgba(255, 255, 255, 0.86);
+        color: var(--muted);
+        padding: 10px 14px;
+        border-radius: 999px;
+      }
+
+      .filter.is-active {
+        background: var(--navy);
+        color: #f6fbff;
+        box-shadow: 0 12px 24px rgba(13, 33, 57, 0.18);
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .card {
+        position: relative;
+        padding: 22px;
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 16px 32px rgba(13, 33, 57, 0.08);
+        overflow: hidden;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, var(--sky), var(--teal));
+      }
+
+      .card[data-status="Completed"]::before {
+        background: linear-gradient(90deg, var(--teal), #95f0e1);
+      }
+
+      .card[data-status="In Progress"]::before {
+        background: linear-gradient(90deg, var(--gold), var(--coral));
+      }
+
+      .card-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+      }
+
+      .card h3 {
+        margin: 0;
+        font-size: 1.35rem;
+        letter-spacing: -0.04em;
+      }
+
+      .card p {
+        min-height: 76px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 999px;
+        font-size: 0.84rem;
+        white-space: nowrap;
+      }
+
+      .badge::before {
+        content: "";
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+        background: currentColor;
+      }
+
+      .badge[data-status="Not Started"] {
+        background: rgba(103, 168, 255, 0.12);
+        color: #2e62a5;
+      }
+
+      .badge[data-status="In Progress"] {
+        background: rgba(243, 195, 93, 0.18);
+        color: #9a6617;
+      }
+
+      .badge[data-status="Completed"] {
+        background: rgba(20, 200, 167, 0.14);
+        color: #0e6958;
+      }
+
+      .meta {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .chip {
+        padding: 12px 14px;
+        border-radius: var(--radius-md);
+        background: rgba(16, 35, 59, 0.04);
+      }
+
+      .chip span {
+        display: block;
+        font-size: 0.75rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .chip strong {
+        display: block;
+        margin-top: 8px;
+        font-size: 0.98rem;
+      }
+
+      .deadline {
+        margin-bottom: 18px;
+        padding: 12px 14px;
+        border-radius: var(--radius-md);
+        font-size: 0.9rem;
+      }
+
+      .deadline.neutral {
+        background: rgba(103, 168, 255, 0.12);
+        color: #2e62a5;
+      }
+
+      .deadline.warning {
+        background: rgba(243, 195, 93, 0.18);
+        color: #8c5e15;
+      }
+
+      .deadline.success {
+        background: rgba(20, 200, 167, 0.14);
+        color: #0e6958;
+      }
+
+      .deadline.danger {
+        background: rgba(222, 90, 90, 0.14);
+        color: #963737;
+      }
+
+      .card-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .card-actions button {
+        flex: 1;
+      }
+
+      .btn-ghost {
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid rgba(16, 35, 59, 0.08);
+        color: var(--ink);
+      }
+
+      .empty {
+        display: none;
+        margin-top: 18px;
+        padding: 38px 24px;
+        border-radius: 28px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.82);
+        border: 1px dashed rgba(16, 35, 59, 0.14);
+      }
+
+      .empty.is-visible {
+        display: block;
+      }
+
+      .empty-mark {
+        width: 82px;
+        height: 82px;
+        margin: 0 auto 16px;
+        display: grid;
+        place-items: center;
+        border-radius: 24px;
+        font-size: 2rem;
+        background:
+          linear-gradient(135deg, rgba(255, 127, 90, 0.14), rgba(20, 200, 167, 0.16)),
+          #fff;
+      }
+
+      .overlay,
+      .modal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        z-index: 60;
+      }
+
+      .overlay.is-visible {
+        display: grid;
+        place-items: center;
+        background: rgba(13, 33, 57, 0.18);
+        backdrop-filter: blur(8px);
+      }
+
+      .loader {
+        min-width: min(340px, calc(100vw - 32px));
+        padding: 24px;
+        border-radius: 28px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.84);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        box-shadow: var(--shadow);
+      }
+
+      .spinner {
+        width: 48px;
+        height: 48px;
+        margin: 0 auto 14px;
+        border-radius: 999px;
+        border: 4px solid rgba(16, 35, 59, 0.08);
+        border-top-color: var(--teal);
+        animation: spin 0.9s linear infinite;
+      }
+
+      .modal.is-visible {
+        display: grid;
+        place-items: center;
+        padding: 20px;
+        background: rgba(13, 33, 57, 0.26);
+        backdrop-filter: blur(10px);
+      }
+
+      .modal-panel {
+        width: min(680px, 100%);
+        max-height: calc(100vh - 40px);
+        overflow: auto;
+        padding: 24px;
+        border-radius: 32px;
+        background: rgba(250, 247, 239, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        box-shadow: var(--shadow);
+      }
+
+      .modal-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .icon-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        border: 1px solid rgba(16, 35, 59, 0.08);
+        background: rgba(255, 255, 255, 0.84);
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @media (max-width: 1100px) {
+        .hero,
+        .grid,
+        .summary,
+        .cards {
+          grid-template-columns: 1fr;
+        }
+
+        .composer {
+          position: static;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .shell {
+          width: min(100% - 24px, 1320px);
+          padding-top: 18px;
+        }
+
+        .hero,
+        .composer,
+        .studio,
+        .modal-panel {
+          padding: 20px;
+          border-radius: 28px;
+        }
+
+        .hero-metrics,
+        .meta {
+          grid-template-columns: 1fr;
+        }
+
+        .studio-header,
+        .card-head,
+        .modal-head,
+        .notice {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <div class="pill">Frontend rebuilt from scratch with the same course API.</div>
+
+      <section class="hero" aria-labelledby="heroTitle">
+        <div class="hero-copy">
+          <div class="eyebrow">CodeCraftHub Learning Studio</div>
+          <h1 id="heroTitle">Build momentum around what you want to learn next.</h1>
+          <p>
+            Track courses, surface deadlines, and manage your learning roadmap from one
+            polished dashboard. The visuals are custom, but the project still uses only
+            vanilla HTML, CSS, and JavaScript.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="#composer">Add a new course</a>
+            <button class="btn btn-secondary" type="button" data-refresh>
+              Refresh dashboard
+            </button>
+          </div>
+          <p class="hero-note" id="heroNote">
+            Waiting for your first course to define the next sprint.
+          </p>
+        </div>
+
+        <div class="hero-panel">
+          <div class="glass">
+            <span class="glass-label">Live pulse</span>
+            <div class="hero-metrics">
+              <div class="hero-metric">
+                <span>Total courses</span>
+                <strong id="heroTotal">0</strong>
+              </div>
+              <div class="hero-metric">
+                <span>In progress</span>
+                <strong id="heroActive">0</strong>
+              </div>
+              <div class="hero-metric">
+                <span>Completion rate</span>
+                <strong id="heroCompletion">0%</strong>
+              </div>
+              <div class="hero-metric">
+                <span>Next milestone</span>
+                <strong id="heroDeadline">No dates</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass">
+            <span class="glass-label">Learning rhythm</span>
+            <div class="progress-bar" aria-hidden="true">
+              <span id="completionBar"></span>
+            </div>
+            <p class="hero-note" id="progressNote" style="margin: 14px 0 0;">
+              Completion metrics will appear as soon as your course list starts growing.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <main class="grid">
+        <aside class="panel composer" id="composer">
+          <h2>Course composer</h2>
+          <p>
+            Add the next course you want to tackle. The dashboard syncs instantly and
+            updates the live stats automatically.
+          </p>
+          <div class="swatch" aria-hidden="true"><span></span><span></span><span></span></div>
+
+          <form id="createForm">
+            <div class="field">
+              <label for="name">Course name</label>
+              <input id="name" name="name" type="text" placeholder="Advanced Node Patterns" required />
+            </div>
+            <div class="field">
+              <label for="description">Description</label>
+              <textarea
+                id="description"
+                name="description"
+                placeholder="What will this course help you unlock?"
+                required
+              ></textarea>
+            </div>
+            <div class="field">
+              <label for="target_date">Target completion date</label>
+              <input id="target_date" name="target_date" type="date" required />
+            </div>
+            <div class="field">
+              <label for="status">Status</label>
+              <select id="status" name="status" required>
+                <option value="Not Started">Not Started</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+              </select>
+            </div>
+            <div class="submit-row">
+              <button class="btn btn-accent" id="createButton" type="submit">Add course</button>
+              <span class="tiny">The backend assigns the ID and creation timestamp.</span>
+            </div>
+          </form>
+        </aside>
+
+        <section class="panel studio" aria-labelledby="studioTitle">
+          <div class="studio-header">
+            <div>
+              <h2 id="studioTitle">Learning command center</h2>
+              <p>
+                Review upcoming deadlines, filter your roadmap, and edit courses without
+                leaving the page.
+              </p>
+            </div>
+            <button class="btn btn-secondary" type="button" data-refresh>Sync now</button>
+          </div>
+
+          <div class="summary">
+            <article class="metric">
+              <span>Total tracked</span>
+              <div class="metric-value" id="metricTotal">0</div>
+              <small id="metricTotalMeta">Courses in your learning stack</small>
+            </article>
+            <article class="metric">
+              <span>Focus now</span>
+              <div class="metric-value" id="metricActive">0</div>
+              <small id="metricActiveMeta">No active sprint yet</small>
+            </article>
+            <article class="metric">
+              <span>Completed</span>
+              <div class="metric-value" id="metricCompleted">0</div>
+              <small id="metricCompletedMeta">Courses already shipped</small>
+            </article>
+            <article class="metric">
+              <span>Next deadline</span>
+              <div class="metric-value" id="metricDeadline">-</div>
+              <small id="metricDeadlineMeta">Pick a target date to see it here</small>
+            </article>
+          </div>
+
+          <div class="notice" id="notice" data-tone="neutral" role="status" aria-live="polite">
+            <span id="noticeMessage"></span>
+            <button id="dismissNotice" type="button" aria-label="Dismiss message">×</button>
+          </div>
+
+          <div class="toolbar">
+            <div class="search">
+              <label class="sr-only" for="search">Search courses</label>
+              <input id="search" type="search" placeholder="Search by course name or description" />
+            </div>
+            <div class="filters" id="filters" aria-label="Course status filters"></div>
+          </div>
+
+          <div class="cards" id="cards"></div>
+
+          <div class="empty" id="emptyState">
+            <div class="empty-mark" aria-hidden="true">+</div>
+            <h3>No courses match this view.</h3>
+            <p id="emptyMessage">
+              Add a course in the composer panel or change the filters to reveal more of your roadmap.
+            </p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="overlay" id="overlay" aria-hidden="true">
+      <div class="loader">
+        <div class="spinner" aria-hidden="true"></div>
+        <p id="overlayMessage">Syncing your dashboard...</p>
+      </div>
+    </div>
+
+    <div class="modal" id="editModal" aria-hidden="true">
+      <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+        <div class="modal-head">
+          <div>
+            <h2 id="editTitle">Edit course</h2>
+            <p>Update the course details and save the changes back to the API.</p>
+          </div>
+          <button class="icon-btn" id="closeModal" type="button" aria-label="Close edit dialog">×</button>
+        </div>
+
+        <form id="editForm">
+          <input id="editId" name="id" type="hidden" />
+          <div class="field">
+            <label for="editName">Course name</label>
+            <input id="editName" name="name" type="text" required />
+          </div>
+          <div class="field">
+            <label for="editDescription">Description</label>
+            <textarea id="editDescription" name="description" required></textarea>
+          </div>
+          <div class="field">
+            <label for="editTargetDate">Target completion date</label>
+            <input id="editTargetDate" name="target_date" type="date" required />
+          </div>
+          <div class="field">
+            <label for="editStatus">Status</label>
+            <select id="editStatus" name="status" required>
+              <option value="Not Started">Not Started</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+          <div class="submit-row">
+            <button class="btn btn-accent" id="saveButton" type="submit">Save changes</button>
+            <button class="btn btn-secondary" id="cancelEdit" type="button">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function resolveApiBase() {
+        const { protocol, hostname, port } = window.location;
+        const isLocalHost = hostname === "localhost" || hostname === "127.0.0.1";
+
+        if (protocol === "file:") {
+          return "http://localhost:5000/api/courses";
+        }
+
+        if (isLocalHost && port && port !== "5000") {
+          return `${protocol}//${hostname}:5000/api/courses`;
+        }
+
+        return "/api/courses";
+      }
+
+      const API_BASE = resolveApiBase();
+      const STATUSES = ["Not Started", "In Progress", "Completed"];
+      const FILTERS = ["All", ...STATUSES];
+      const state = { courses: [], stats: null, filter: "All", search: "" };
+      const refs = {
+        createForm: document.getElementById("createForm"),
+        createButton: document.getElementById("createButton"),
+        editForm: document.getElementById("editForm"),
+        saveButton: document.getElementById("saveButton"),
+        editModal: document.getElementById("editModal"),
+        overlay: document.getElementById("overlay"),
+        overlayMessage: document.getElementById("overlayMessage"),
+        cards: document.getElementById("cards"),
+        filters: document.getElementById("filters"),
+        search: document.getElementById("search"),
+        emptyState: document.getElementById("emptyState"),
+        emptyMessage: document.getElementById("emptyMessage"),
+        notice: document.getElementById("notice"),
+        noticeMessage: document.getElementById("noticeMessage"),
+        heroTotal: document.getElementById("heroTotal"),
+        heroActive: document.getElementById("heroActive"),
+        heroCompletion: document.getElementById("heroCompletion"),
+        heroDeadline: document.getElementById("heroDeadline"),
+        heroNote: document.getElementById("heroNote"),
+        progressNote: document.getElementById("progressNote"),
+        completionBar: document.getElementById("completionBar"),
+        metricTotal: document.getElementById("metricTotal"),
+        metricTotalMeta: document.getElementById("metricTotalMeta"),
+        metricActive: document.getElementById("metricActive"),
+        metricActiveMeta: document.getElementById("metricActiveMeta"),
+        metricCompleted: document.getElementById("metricCompleted"),
+        metricCompletedMeta: document.getElementById("metricCompletedMeta"),
+        metricDeadline: document.getElementById("metricDeadline"),
+        metricDeadlineMeta: document.getElementById("metricDeadlineMeta"),
+        editId: document.getElementById("editId"),
+        editName: document.getElementById("editName"),
+        editDescription: document.getElementById("editDescription"),
+        editTargetDate: document.getElementById("editTargetDate"),
+        editStatus: document.getElementById("editStatus"),
+        dismissNotice: document.getElementById("dismissNotice"),
+        closeModal: document.getElementById("closeModal"),
+        cancelEdit: document.getElementById("cancelEdit"),
+        refreshButtons: document.querySelectorAll("[data-refresh]"),
+      };
+      let noticeTimer = null;
+
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, (character) => (
+          { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[character]
+        ));
+      }
+
+      function readForm(form) {
+        const formData = new FormData(form);
+        return {
+          name: String(formData.get("name") || "").trim(),
+          description: String(formData.get("description") || "").trim(),
+          target_date: String(formData.get("target_date") || "").trim(),
+          status: String(formData.get("status") || "").trim(),
+        };
+      }
+
+      function validateCourse(course) {
+        const errors = [];
+        if (!course.name) errors.push("Course name is required.");
+        if (!course.description) errors.push("Description is required.");
+        if (!course.target_date) errors.push("Target completion date is required.");
+        if (!STATUSES.includes(course.status)) errors.push("Please select a valid status.");
+        return errors;
+      }
+
+      function computeStats(courses) {
+        const byStatus = { "Not Started": 0, "In Progress": 0, Completed: 0 };
+        courses.forEach((course) => {
+          if (Object.prototype.hasOwnProperty.call(byStatus, course.status)) {
+            byStatus[course.status] += 1;
+          }
+        });
+        return { total_courses: courses.length, by_status: byStatus };
+      }
+
+      async function api(url, options = {}) {
+        const response = await fetch(url, {
+          headers: {
+            Accept: "application/json",
+            ...(options.body ? { "Content-Type": "application/json" } : {}),
+            ...(options.headers || {}),
+          },
+          ...options,
+        });
+        const raw = await response.text();
+        let payload = null;
+        if (raw) {
+          try {
+            payload = JSON.parse(raw);
+          } catch {
+            payload = raw;
+          }
+        }
+        if (!response.ok) {
+          throw new Error(payload && payload.error ? payload.error : `Request failed with status ${response.status}.`);
+        }
+        return payload;
+      }
+
+      function showOverlay(message) {
+        refs.overlayMessage.textContent = message;
+        refs.overlay.classList.add("is-visible");
+        refs.overlay.setAttribute("aria-hidden", "false");
+      }
+
+      function hideOverlay() {
+        refs.overlay.classList.remove("is-visible");
+        refs.overlay.setAttribute("aria-hidden", "true");
+      }
+
+      function showNotice(message, tone = "neutral", timeout = 3600) {
+        refs.notice.dataset.tone = tone;
+        refs.noticeMessage.textContent = message;
+        refs.notice.classList.add("is-visible");
+        if (noticeTimer) window.clearTimeout(noticeTimer);
+        if (timeout > 0) noticeTimer = window.setTimeout(hideNotice, timeout);
+      }
+
+      function hideNotice() {
+        refs.notice.classList.remove("is-visible");
+      }
+
+      function formatTargetDate(value) {
+        return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", year: "numeric" })
+          .format(new Date(`${value}T00:00:00`));
+      }
+
+      function formatCreatedAt(value) {
+        return new Intl.DateTimeFormat(undefined, {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+        }).format(new Date(value));
+      }
+
+      function deadlineMeta(course) {
+        if (course.status === "Completed") {
+          return { tone: "success", text: "Completed and archived in your finished track." };
+        }
+        const today = new Date();
+        const target = new Date(`${course.target_date}T00:00:00`);
+        today.setHours(0, 0, 0, 0);
+        target.setHours(0, 0, 0, 0);
+        const days = Math.round((target - today) / 86400000);
+        if (days < 0) return { tone: "danger", text: `Overdue by ${Math.abs(days)} day${Math.abs(days) === 1 ? "" : "s"}.` };
+        if (days === 0) return { tone: "warning", text: "Due today. This is your current priority lane." };
+        if (days <= 7) return { tone: "warning", text: `Due in ${days} day${days === 1 ? "" : "s"}.` };
+        return { tone: "neutral", text: `Due in ${days} day${days === 1 ? "" : "s"}.` };
+      }
+
+      function nextMilestone(courses) {
+        return courses
+          .filter((course) => course.status !== "Completed")
+          .sort((left, right) => left.target_date.localeCompare(right.target_date))[0] || null;
+      }
+
+      function filteredCourses() {
+        const term = state.search.toLowerCase();
+        const rank = { "In Progress": 0, "Not Started": 1, Completed: 2 };
+        return state.courses
+          .filter((course) => {
+            const statusMatch = state.filter === "All" || course.status === state.filter;
+            const searchMatch = !term || course.name.toLowerCase().includes(term) || course.description.toLowerCase().includes(term);
+            return statusMatch && searchMatch;
+          })
+          .sort((left, right) => (rank[left.status] - rank[right.status]) || left.target_date.localeCompare(right.target_date));
+      }
+
+      function renderFilters() {
+        refs.filters.innerHTML = FILTERS.map((filter) => `
+          <button class="filter ${filter === state.filter ? "is-active" : ""}" type="button" data-filter="${filter}">
+            ${escapeHtml(filter)}
+          </button>
+        `).join("");
+      }
+
+      function renderMetrics() {
+        const stats = state.stats || computeStats(state.courses);
+        const total = stats.total_courses;
+        const active = stats.by_status["In Progress"];
+        const completed = stats.by_status.Completed;
+        const completion = total ? Math.round((completed / total) * 100) : 0;
+        const next = nextMilestone(state.courses);
+
+        refs.heroTotal.textContent = String(total);
+        refs.heroActive.textContent = String(active);
+        refs.heroCompletion.textContent = `${completion}%`;
+        refs.heroDeadline.textContent = next ? formatTargetDate(next.target_date) : "No dates";
+        refs.completionBar.style.width = `${completion}%`;
+        refs.metricTotal.textContent = String(total);
+        refs.metricTotalMeta.textContent = total ? `${total} course${total === 1 ? "" : "s"} being tracked` : "Courses in your learning stack";
+        refs.metricActive.textContent = String(active);
+        refs.metricActiveMeta.textContent = active ? `${active} course${active === 1 ? "" : "s"} in motion` : "No active sprint yet";
+        refs.metricCompleted.textContent = String(completed);
+        refs.metricCompletedMeta.textContent = completed ? `${completion}% of your roadmap finished` : "Courses already shipped";
+        refs.progressNote.textContent = total
+          ? `${completed} of ${total} course${total === 1 ? "" : "s"} completed. Keep the streak moving.`
+          : "Completion metrics will appear as soon as your course list starts growing.";
+        if (next) {
+          refs.metricDeadline.textContent = formatTargetDate(next.target_date);
+          refs.metricDeadlineMeta.textContent = `${next.name} is the next milestone on deck.`;
+          refs.heroNote.textContent = `${next.name} is the next course pushing your roadmap forward.`;
+        } else {
+          refs.metricDeadline.textContent = "-";
+          refs.metricDeadlineMeta.textContent = "Pick a target date to see it here";
+          refs.heroNote.textContent = total
+            ? "No active deadlines right now. Everything completed or already wrapped."
+            : "Waiting for your first course to define the next sprint.";
+        }
+      }
+
+      function renderCards() {
+        const courses = filteredCourses();
+        if (!courses.length) {
+          refs.cards.innerHTML = "";
+          refs.emptyState.classList.add("is-visible");
+          refs.emptyMessage.textContent = state.courses.length
+            ? "Try another filter or search term to reveal more courses."
+            : "Start by adding a course in the composer panel and the dashboard will come alive.";
+          return;
+        }
+        refs.emptyState.classList.remove("is-visible");
+        refs.cards.innerHTML = courses.map((course) => {
+          const deadline = deadlineMeta(course);
+          return `
+            <article class="card" data-status="${escapeHtml(course.status)}">
+              <div class="card-head">
+                <h3>${escapeHtml(course.name)}</h3>
+                <span class="badge" data-status="${escapeHtml(course.status)}">${escapeHtml(course.status)}</span>
+              </div>
+              <p>${escapeHtml(course.description)}</p>
+              <div class="meta">
+                <div class="chip"><span>Target date</span><strong>${escapeHtml(formatTargetDate(course.target_date))}</strong></div>
+                <div class="chip"><span>Created</span><strong>${escapeHtml(formatCreatedAt(course.created_at))}</strong></div>
+              </div>
+              <div class="deadline ${deadline.tone}">${escapeHtml(deadline.text)}</div>
+              <div class="card-actions">
+                <button class="btn btn-ghost" type="button" data-action="edit" data-id="${course.id}">Edit</button>
+                <button class="btn btn-danger" type="button" data-action="delete" data-id="${course.id}">Remove</button>
+              </div>
+            </article>
+          `;
+        }).join("");
+      }
+
+      function render() {
+        renderFilters();
+        renderMetrics();
+        renderCards();
+      }
+
+      async function loadDashboard(silent = false) {
+        if (!silent) showOverlay("Syncing your dashboard...");
+        try {
+          const [courses, stats] = await Promise.all([api(API_BASE), api(`${API_BASE}/stats`).catch(() => null)]);
+          state.courses = Array.isArray(courses) ? courses : [];
+          state.stats = stats || computeStats(state.courses);
+          render();
+        } catch (error) {
+          showNotice(error.message, "error", 5200);
+        } finally {
+          hideOverlay();
+        }
+      }
+
+      function openModal(course) {
+        refs.editId.value = course.id;
+        refs.editName.value = course.name;
+        refs.editDescription.value = course.description;
+        refs.editTargetDate.value = course.target_date;
+        refs.editStatus.value = course.status;
+        refs.editModal.classList.add("is-visible");
+        refs.editModal.setAttribute("aria-hidden", "false");
+      }
+
+      function closeModal() {
+        refs.editModal.classList.remove("is-visible");
+        refs.editModal.setAttribute("aria-hidden", "true");
+        refs.editForm.reset();
+      }
+
+      async function submitCreate(event) {
+        event.preventDefault();
+        const payload = readForm(refs.createForm);
+        const errors = validateCourse(payload);
+        if (errors.length) return showNotice(errors.join(" "), "error");
+        refs.createButton.disabled = true;
+        showOverlay("Creating course...");
+        try {
+          await api(API_BASE, { method: "POST", body: JSON.stringify(payload) });
+          refs.createForm.reset();
+          setDefaultDate();
+          refs.createForm.querySelector('[name="status"]').value = "Not Started";
+          showNotice("Course added to your learning studio.", "success");
+          await loadDashboard(true);
+        } catch (error) {
+          showNotice(error.message, "error");
+        } finally {
+          refs.createButton.disabled = false;
+          hideOverlay();
+        }
+      }
+
+      async function submitEdit(event) {
+        event.preventDefault();
+        const payload = readForm(refs.editForm);
+        const errors = validateCourse(payload);
+        if (errors.length) return showNotice(errors.join(" "), "error");
+        refs.saveButton.disabled = true;
+        showOverlay("Saving course changes...");
+        try {
+          await api(`${API_BASE}/${refs.editId.value}`, { method: "PUT", body: JSON.stringify(payload) });
+          closeModal();
+          showNotice("Course updated successfully.", "success");
+          await loadDashboard(true);
+        } catch (error) {
+          showNotice(error.message, "error");
+        } finally {
+          refs.saveButton.disabled = false;
+          hideOverlay();
+        }
+      }
+
+      async function removeCourse(id) {
+        const course = state.courses.find((item) => item.id === id);
+        if (!window.confirm(`Delete ${course ? course.name : "this course"}? This action cannot be undone.`)) return;
+        showOverlay("Removing course...");
+        try {
+          await api(`${API_BASE}/${id}`, { method: "DELETE" });
+          showNotice("Course removed from the dashboard.", "success");
+          await loadDashboard(true);
+        } catch (error) {
+          showNotice(error.message, "error");
+        } finally {
+          hideOverlay();
+        }
+      }
+
+      function setDefaultDate() {
+        const target = new Date();
+        target.setDate(target.getDate() + 21);
+        refs.createForm.querySelector('[name="target_date"]').value = target.toISOString().slice(0, 10);
+      }
+
+      refs.createForm.addEventListener("submit", submitCreate);
+      refs.editForm.addEventListener("submit", submitEdit);
+      refs.search.addEventListener("input", (event) => {
+        state.search = event.target.value.trim();
+        renderCards();
+      });
+      refs.filters.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-filter]");
+        if (!button) return;
+        state.filter = button.dataset.filter;
+        render();
+      });
+      refs.cards.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-action]");
+        if (!button) return;
+        const id = Number(button.dataset.id);
+        const course = state.courses.find((item) => item.id === id);
+        if (!course) return showNotice("That course could not be found in the current view.", "error");
+        if (button.dataset.action === "edit") openModal(course);
+        if (button.dataset.action === "delete") removeCourse(id);
+      });
+      refs.dismissNotice.addEventListener("click", hideNotice);
+      refs.closeModal.addEventListener("click", closeModal);
+      refs.cancelEdit.addEventListener("click", closeModal);
+      refs.editModal.addEventListener("click", (event) => {
+        if (event.target === refs.editModal) closeModal();
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && refs.editModal.classList.contains("is-visible")) closeModal();
+      });
+      refs.refreshButtons.forEach((button) => button.addEventListener("click", () => loadDashboard()));
+
+      setDefaultDate();
+      renderFilters();
+      render();
+      loadDashboard();
+    </script>
+  </body>
+</html>

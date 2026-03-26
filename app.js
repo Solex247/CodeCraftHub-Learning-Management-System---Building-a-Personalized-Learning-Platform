@@ -7,9 +7,34 @@ const PORT = Number(process.env.PORT) || 5000;
 const DATA_FILE = process.env.COURSES_FILE
   ? path.resolve(process.env.COURSES_FILE)
   : path.join(__dirname, "courses.json");
+const PUBLIC_DIR = path.join(__dirname, "public");
 const VALID_STATUSES = ["Not Started", "In Progress", "Completed"];
+const LOCAL_DEV_ORIGIN_PATTERN = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
 
 app.use(express.json());
+app.use((request, response, next) => {
+  const origin = request.headers.origin;
+
+  if (!origin) {
+    next();
+    return;
+  }
+
+  if (origin === "null" || LOCAL_DEV_ORIGIN_PATTERN.test(origin)) {
+    response.setHeader("Access-Control-Allow-Origin", origin);
+    response.setHeader("Vary", "Origin");
+    response.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+    response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  }
+
+  if (request.method === "OPTIONS") {
+    response.sendStatus(204);
+    return;
+  }
+
+  next();
+});
+app.use(express.static(PUBLIC_DIR));
 
 function createHttpError(statusCode, message) {
   const error = new Error(message);
@@ -188,9 +213,10 @@ function asyncHandler(handler) {
   };
 }
 
-app.get("/", (request, response) => {
+app.get("/api", (request, response) => {
   response.json({
     message: "Welcome to the CodeCraftHub API.",
+    dashboard: "/",
     endpoints: [
       "POST /api/courses",
       "GET /api/courses",
@@ -338,6 +364,7 @@ async function startServer() {
   app.listen(PORT, () => {
     console.log("- CodeCraftHub API is starting...");
     console.log(`- Data will be stored in: ${DATA_FILE}`);
+    console.log(`- Dashboard is available at: http://localhost:${PORT}`);
     console.log(`- API is available at: http://localhost:${PORT}`);
   });
 }
